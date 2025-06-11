@@ -1,0 +1,5 @@
+Flask
+firebase-admin
+requests
+fpdf
+gunicorn
