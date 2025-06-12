@@ -4,7 +4,6 @@ from pdf_generator import generate_pdf
 from datetime import datetime
 import requests
 from twilio.twiml.messaging_response import MessagingResponse
-from dotenv import load_dotenv
 
 
 load_dotenv()
