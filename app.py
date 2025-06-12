@@ -30,7 +30,7 @@ def incoming_message():
         images = [item for item in msglist if isinstance(item, dict) and item['type'] == 'image']
 
         image_paths = [img['path'] for img in images]
-        pdf_path = generate_pdf_with_images(texts, image_paths)
+        pdf_path = generate_pdf(texts, image_paths)
 
         response = MessagingResponse()
         response.message("Here is your PDF").media(f"{grokurl}static/output.pdf")
