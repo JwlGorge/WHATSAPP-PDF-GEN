@@ -16,45 +16,51 @@ def generate_pdf(msglist):
     line_height = 14
     y = height - margin_y
 
-    # Register DejaVu font
     pdfmetrics.registerFont(TTFont('DejaVu', 'DejaVuSans.ttf'))
     c.setFont("DejaVu", 12)
 
     for item in msglist:
-        if item.get('type') == 'text':
-            lines = item.get('content', '').splitlines()
-            for line in lines:
-                if y <= margin_y:
-                    c.showPage()
-                    c.setFont("DejaVu", 12)
-                    y = height - margin_y
-                c.drawString(margin_x, y, line)
-                y -= line_height
+        if isinstance(item, dict):
+            if item.get('type') == 'text':
+                lines = item.get('content', '').splitlines()
+                for line in lines:
+                    if y <= margin_y:
+                        c.showPage()
+                        c.setFont("DejaVu", 12)
+                        y = height - margin_y
+                    c.drawString(margin_x, y, line)
+                    y -= line_height
 
+            elif item.get('type') == 'image':
+                image_path = item.get('path')
+                try:
+                    img = ImageReader(image_path)
+                    iw, ih = img.getSize()
+                    aspect = ih / float(iw)
+                    img_width = width - 2 * margin_x
+                    img_height = img_width * aspect
 
-        elif isinstance(item, dict) and item.get('type') == 'image':
-            # Handle image
-            image_path = item.get('path')
-            try:
-                img = ImageReader(image_path)
-                iw, ih = img.getSize()
-                aspect = ih / float(iw)
-                img_width = width - 2 * margin_x
-                img_height = img_width * aspect
+                    if img_height > (height - 2 * margin_y):
+                        img_height = height - 2 * margin_y
+                        img_width = img_height / aspect
 
-                if img_height > (height - 2 * margin_y):
-                    img_height = height - 2 * margin_y
-                    img_width = img_height / aspect
+                    if y - img_height < margin_y:
+                        c.showPage()
+                        c.setFont("DejaVu", 12)
+                        y = height - margin_y
 
-                if y - img_height < margin_y:
-                    c.showPage()
-                    c.setFont("DejaVu", 12)
-                    y = height - margin_y
-
-                c.drawImage(img, margin_x, y - img_height, img_width, img_height)
-                y -= img_height + 10  # space after image
-            except Exception as e:
-                print(f"Error adding image {image_path}: {e}")
+                    c.drawImage(img, margin_x, y - img_height, img_width, img_height)
+                    y -= img_height + 10
+                except Exception as e:
+                    print(f"Error adding image {image_path}: {e}")
+        else:
+            # Fallback for old string-only messages (optional)
+            if y <= margin_y:
+                c.showPage()
+                c.setFont("DejaVu", 12)
+                y = height - margin_y
+            c.drawString(margin_x, y, str(item))
+            y -= line_height
 
     c.save()
     return output_path
