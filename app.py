@@ -33,8 +33,7 @@ def incoming_message():
         pdf_url = f"{grokurl}{pdf_path}"  # Update ngrok URL here each time runnig grok
 
         response = MessagingResponse()
-        response.message("Here is your PDF").media(f"grokurlstatic/output.pdf")
-
+        response.message("Here is your PDF").media(f"{grokurl}static/output.pdf")
         msglist.clear()  # Reset for next session
         return str(response)
 
