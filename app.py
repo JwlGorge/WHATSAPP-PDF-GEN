@@ -26,11 +26,8 @@ def incoming_message():
 
     # If user sends "pdf", generate the PDF
     if msg_body.strip().lower() == "pdf":
-        texts = [item for item in msglist if isinstance(item, str)]
-        images = [item for item in msglist if isinstance(item, dict) and item['type'] == 'image']
-
-        image_paths = [img['path'] for img in images]
-        pdf_path = generate_pdf(texts, image_paths)
+        
+        pdf_path = generate_pdf(msglist)
 
         response = MessagingResponse()
         response.message("Here is your PDF").media(f"{grokurl}static/output.pdf")
