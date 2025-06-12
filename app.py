@@ -35,8 +35,10 @@ def incoming_message():
         return str(response)
 
     # Append text if text message received
+    
     if msg_body and msg_body.strip().lower() != "pdf":
-        msglist.append(msg_body)
+        msglist.append({'type': 'text', 'content': msg_body})
+
 
     # Handle multiple media (image) files
     for i in range(num_media):
@@ -44,11 +46,21 @@ def incoming_message():
         content_type = request.form.get(f'MediaContentType{i}')
 
         if content_type.startswith('image'):
-            img_data = requests.get(media_url).content
+            try:
+                resp = requests.get(media_url, timeout=10)
+                resp.raise_for_status()
+                img_data = resp.content
+            except Exception as e:
+                print(f"Error downloading image: {e}")
+                continue  # skip bad image
+
             img_path = f"static/image_{datetime.now().strftime('%Y%m%d%H%M%S%f')}.jpg"
             with open(img_path, 'wb') as f:
                 f.write(img_data)
             msglist.append({'type': 'image', 'path': img_path})
+    for item in msglist:
+        if item.get('type') == 'image':
+            os.remove(item['path'])
 
     return "Done", 200
 

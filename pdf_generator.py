@@ -21,9 +21,8 @@ def generate_pdf(msglist):
     c.setFont("DejaVu", 12)
 
     for item in msglist:
-        if isinstance(item, str):
-            # Handle text
-            lines = item.splitlines()
+        if item.get('type') == 'text':
+            lines = item.get('content', '').splitlines()
             for line in lines:
                 if y <= margin_y:
                     c.showPage()
@@ -31,6 +30,7 @@ def generate_pdf(msglist):
                     y = height - margin_y
                 c.drawString(margin_x, y, line)
                 y -= line_height
+
 
         elif isinstance(item, dict) and item.get('type') == 'image':
             # Handle image
