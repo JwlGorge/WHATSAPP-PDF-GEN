@@ -1,6 +1,6 @@
 import os
 from flask import Flask, request, jsonify, send_file
-from pdf_generator import generate_pdf_with_images
+from pdf_generator import generate_pdf
 from datetime import datetime
 import requests
 from twilio.twiml.messaging_response import MessagingResponse
