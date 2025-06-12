@@ -6,7 +6,6 @@ import requests
 from twilio.twiml.messaging_response import MessagingResponse
 
 
-load_dotenv()
 app = Flask(__name__)
 
 
