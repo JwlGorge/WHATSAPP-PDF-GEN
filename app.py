@@ -22,6 +22,10 @@ def incoming_message():
     sender = request.form.get('From')
     msg_body = request.form.get('Body')
     num_media = int(request.form.get('NumMedia', 0))
+    print("Twilio sent NumMedia:", num_media)
+    print(f"Incoming message from: {sender}")
+    print(f"Message body: {msg_body}")
+    print(f"Number of media files: {num_media}")
 
 
     # If user sends "pdf", generate the PDF
@@ -44,6 +48,8 @@ def incoming_message():
     for i in range(num_media):
         media_url = request.form.get(f'MediaUrl{i}')
         content_type = request.form.get(f'MediaContentType{i}')
+        print(f"Media {i}: URL = {media_url}")
+        print(f"Media {i}: Content-Type = {content_type}")
 
         if content_type.startswith('image'):
             try:
