@@ -1,6 +1,6 @@
 Flask
 firebase-admin
 requests
-fpdf
+reportlab	
 gunicorn
 twilio
