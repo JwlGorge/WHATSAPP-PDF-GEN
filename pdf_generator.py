@@ -2,7 +2,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfbase import pdfmetricsimport os
+from reportlab.pdfbase import pdfmetrics
+import os
 def generate_pdf( msglist):
     output_dir = "static"
     output_path = os.path.join(output_dir, "output.pdf")
